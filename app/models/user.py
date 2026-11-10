@@ -5,7 +5,7 @@ from app.models.mixins import TimestampMixin
 from app.db.base import Base
 
 
-class User(Base, TimestampMixin):
+class User(TimestampMixin, Base):
     __tablename__ = "users"
 
     id:Mapped[uuid.UUID] = mapped_column(
@@ -33,14 +33,15 @@ class User(Base, TimestampMixin):
     is_active: Mapped[bool] = mapped_column(
         Boolean,
         nullable=False,
-        default=True
+        default=True,
+        server_default="true"
     )
     avatar: Mapped[str] = mapped_column(
         String,
         nullable=True
     )
 
-    products : Mapped[list["Products"]] = relationship(
+    products : Mapped[list["Product"]] = relationship(
         back_populates="owner",
         lazy="raise",
         cascade="all, delete-orphan"
